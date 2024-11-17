@@ -48,6 +48,7 @@ mlProject/
 │   ├── __init__.py
 │   ├── settings.py
 │   ├── urls.py
+|   ├── views.py
 │   └── wsgi.py
 ├── templates/
 │   ├── index.html
@@ -61,17 +62,12 @@ mlProject/
 
 ## 🚀 Running the Application
 
-1. Apply database migrations:
-```bash
-python manage.py migrate
-```
-
-2. Start the development server:
+1. Start the development server:
 ```bash
 python manage.py runserver
 ```
 
-3. Access the application at: `http://127.0.0.1:8000`
+2. Access the application at: `http://127.0.0.1:8000`
 
 ## 📝 Input Parameters
 
