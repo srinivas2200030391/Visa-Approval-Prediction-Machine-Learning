@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Visa Status Prediction</title>
+    <style>
+        /* General styling */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f9;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .container {
+            background-color: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            width: 80%;
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 20px;
+        }
+
+        label {
+            font-size: 16px;
+            color: #333;
+            margin-bottom: 10px;
+            display: inline-block;
+        }
+
+        select, input {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 20px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 16px;
+            color: #333;
+        }
+
+        button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 12px 20px;
+            font-size: 16px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            width: 100%;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+
+        .tri {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Visa Status Prediction</h1>
+        <form method="POST" action="{% url 'predict' %}">
+            {% csrf_token %}
+            <div class="tri">
+                <div>
+                    <label for="country">Country:</label>
+                    <select id="country" name="country" required>
+                        <option value="">Select Country</option>
+                        <option value="America">America</option>
+                        <option value="Dubai">Dubai</option>
+                        <option value="Australia">Australia</option>
+                    </select><br><br>
+
+                    <label for="university">University:</label>
+                    <select id="university" name="university" required>
+                        <option value="">Select University</option>
+                    </select><br><br>
+
+                    <label for="education_level">Education Level:</label>
+                    <select id="education_level" name="education_level" required>
+                        <option value="">Select Education Level</option>
+                        <option value="Undergraduate">Undergraduate</option>
+                        <option value="Masters">Masters</option>
+                        <option value="PhD">PhD</option>
+                    </select><br><br>
+
+                    <label for="field_of_study">Field of Study:</label>
+                    <select id="field_of_study" name="field_of_study" required>
+                        <option value="">Select Field of Study</option>
+                        <option value="Engineering">Engineering</option>
+                        <option value="Computer Science">Computer Science</option>
+                        <option value="Medicine">Medicine</option>
+                        <option value="Business">Business</option>
+                        <option value="Arts">Arts</option>
+                    </select><br><br>
+
+                    <label for="financial_status">Financial Status:</label>
+                    <select id="financial_status" name="financial_status" required>
+                        <option value="">Select Financial Status</option>
+                        <option value="Low">Low</option>
+                        <option value="Medium">Medium</option>
+                        <option value="High">High</option>
+                    </select><br><br>
+                </div>
+                <div>
+                    <label for="scholarship_status">Scholarship Status:</label>
+                    <select id="scholarship_status" name="scholarship_status" required>
+                        <option value="">Select Scholarship Status</option>
+                        <option value="True">True</option>
+                        <option value="False">False</option>
+                    </select><br><br>
+
+                    <label for="gpa">GPA:</label>
+                    <input type="number" id="gpa" name="gpa" required step="0.01" min="0" max="4" placeholder="In between 0 and 4"><br><br>
+
+                    <label for="annual_income">Annual Income:</label>
+                    <input type="number" id="annual_income" name="annual_income" required min="0"><br><br>
+
+                    <label for="research_publications">Number of Research Publications:</label>
+                    <input type="number" id="research_publications" name="research_publications" required min="0"><br><br>
+
+                    <label for="previous_visa_rejections">Previous Visa Rejections:</label>
+                    <input type="number" id="previous_visa_rejections" name="previous_visa_rejections" required min="0"><br><br>
+                </div>
+                <div>
+                    <label for="english_proficiency">English Proficiency Score:</label>
+                    <input type="number" id="english_proficiency" name="english_proficiency" required min="60" max="120" placeholder="In between 60 and 120"><br><br>
+
+                    <label for="work_experience_years">Work Experience (Years):</label>
+                    <input type="number" id="work_experience_years" name="work_experience_years" required min="0" max="10"><br><br>
+
+                    <label for="requires_job_training">Requires Job Training:</label>
+                    <select id="requires_job_training" name="requires_job_training" required>
+                        <option value="">--Select--</option>
+                        <option value="True">True</option>
+                        <option value="False">False</option>
+                    </select><br><br>
+
+                    <label for="job_offer_status">Job Offer Status:</label>
+                    <select id="job_offer_status" name="job_offer_status" required>
+                        <option value="">--Select--</option>
+                        <option value="True">True</option>
+                        <option value="False">False</option>
+                    </select><br><br>
+
+                    <label for="model">Select Prediction Model:</label>
+                    <select id="model" name="model" required>
+                        <option value="">Select Model</option>
+                        <option value="random_forest">Random Forest</option>
+                        <option value="decision_tree">Decision Tree</option>
+                        <option value="logistic_regression">Logistic Regression</option>
+                        <option value="neural_networks">Neural Networks</option>
+                    </select><br><br>
+
+                    <!-- Hidden field for country_approval_rate -->
+                    <input type="hidden" id="country_approval_rate" name="country_approval_rate">
+                </div>
+            </div>
+            <button type="submit">Predict Visa Status</button>
+        </form>
+    </div>
+
+    <script>
+        // Dynamically populate universities based on country selection
+        const universities = {
+            "America": ["Harvard", "MIT", "Stanford"],
+            "Dubai": ["University of Dubai", "American University in Dubai", "Zayed University"],
+            "Australia": ["University of Sydney", "University of Melbourne", "Australian National University"]
+        };
+
+        const countryApprovalRates = {
+            "America": 0.8,
+            "Dubai": 0.5,
+            "Australia": 0.7
+        };
+
+        const countrySelect = document.getElementById('country');
+        const universitySelect = document.getElementById('university');
+        const countryApprovalRateInput = document.getElementById('country_approval_rate');
+
+        countrySelect.addEventListener('change', function() {
+            const selectedCountry = countrySelect.value;
+            universitySelect.innerHTML = '<option value="">Select University</option>';
+            if (selectedCountry) {
+                universities[selectedCountry].forEach(function(university) {
+                    const option = document.createElement('option');
+                    option.value = university;
+                    option.textContent = university;
+                    universitySelect.appendChild(option);
+                });
+
+                // Set the country approval rate based on selected country
+                countryApprovalRateInput.value = countryApprovalRates[selectedCountry];
+            }
+        });
+    </script>
+</body>
+</html>
